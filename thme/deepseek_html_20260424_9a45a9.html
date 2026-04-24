@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>0xcRachel · Tùng Dương — Backend Architect & Full-stack Developer</title>
+  <!-- Google Fonts + Inter + Georgia fallback (Claude-inspired serif/sans) -->
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap"
+    rel="stylesheet">
+  <style>
+    /* custom css variables & claude-inspired warm system, using classNames in react */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #f5f4ed;
+      /* parchment base */
+      font-family: 'Inter', system-ui, -apple-system, 'Arial', sans-serif;
+      color: #141413;
+      scroll-behavior: smooth;
+    }
+
+    /* custom ring, shadow and animation utilities (tailwind will extend) */
+    .ring-warm {
+      box-shadow: 0px 0px 0px 1px #d1cfc5;
+    }
+
+    .ring-terracotta {
+      box-shadow: 0px 0px 0px 1px #c96442;
+    }
+
+    .whisper-shadow {
+      box-shadow: rgba(0, 0, 0, 0.05) 0px 4px 24px;
+    }
+
+    .hover-lift {
+      transition: all 0.2s ease;
+    }
+
+    .hover-lift:hover {
+      transform: translateY(-2px);
+      box-shadow: rgba(0, 0, 0, 0.08) 0px 12px 28px;
+    }
+
+    @keyframes float-slow {
+      0% {
+        transform: translateY(0px);
+      }
+
+      50% {
+        transform: translateY(-6px);
+      }
+
+      100% {
+        transform: translateY(0px);
+      }
+    }
+
+    .animate-float {
+      animation: float-slow 5s ease-in-out infinite;
+    }
+  </style>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            parchment: '#f5f4ed',
+            ivory: '#faf9f5',
+            'warm-sand': '#e8e6dc',
+            'terracotta': '#c96442',
+            'coral-accent': '#d97757',
+            'near-black': '#141413',
+            'charcoal-warm': '#4d4c48',
+            'olive-gray': '#5e5d59',
+            'stone-gray': '#87867f',
+            'dark-surface': '#30302e',
+            'border-cream': '#f0eee6',
+            'border-warm': '#e8e6dc',
+            'warm-silver': '#b0aea5',
+          },
+          fontFamily: {
+            serif: ['Playfair Display', 'Georgia', 'serif'],
+            sans: ['Inter', 'system-ui', 'Arial', 'sans-serif'],
+          },
+          borderRadius: {
+            'xl': '1rem',
+            '2xl': '1.25rem',
+            '3xl': '2rem',
+          },
+          boxShadow: {
+            'ring-warm': '0px 0px 0px 1px #d1cfc5',
+            'ring-terracotta': '0px 0px 0px 1px #c96442',
+            'whisper': 'rgba(0, 0, 0, 0.05) 0px 4px 24px',
+          }
+        }
+      }
+    }
+  </script>
+</head>
+
+<body class="bg-parchment antialiased">
+  <div id="root"></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.development.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.development.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.26.0/babel.min.js"></script>
+
+  <script type="text/babel">
+    // --------------------------------------------------------------
+    // REACT COMPONENTS — CLAUDE-INSPIRED MODERN PORTFOLIO
+    // Name: 0xcRachel (Tùng Dương) | Backend & Full-stack Dev
+    // Skills: PHP, Laravel, Rust, Zig, Python, React, NestJS, Next.js, UnrealCV
+    // --------------------------------------------------------------
+    const { useState, useEffect } = React;
+
+    // Projects data (with GitHub repo links)
+    const projectsData = [
+      {
+        id: 1,
+        title: "Homestay Booking System",
+        tech: "Laravel · PHP · MySQL · Tailwind",
+        description: "Led full-stack development of a complete homestay booking platform with real-time availability, payment simulation, and admin dashboard. Optimized DB queries and integrated地图 search.",
+        github: "https://github.com/0xcRachel/homestay-booking",
+        gradientLight: true
+      },
+      {
+        id: 2,
+        title: "Foodie Gourmet (Graduation Project)",
+        tech: "Laravel · Livewire · PostgreSQL · Redis",
+        description: "Core development member for a food ordering & restaurant management system. Implemented JWT auth, order workflow, and caching strategies serving 50+ concurrent users.",
+        github: "https://github.com/0xcRachel/foodie-graduation",
+        gradientLight: false
+      },
+      {
+        id: 3,
+        title: "Rust CLI Tasker",
+        tech: "Rust · Clap · Serde · SQLite",
+        description: "High-performance CLI task manager with async I/O, custom error handling, and report generation. 2x faster than Python alternative.",
+        github: "https://github.com/0xcRachel/rust-cli-tasker",
+        gradientLight: true
+      },
+      {
+        id: 4,
+        title: "Next.js Analytics Dashboard",
+        tech: "Next.js 14 · React · Tailwind · Chart.js",
+        description: "Interactive dashboard with server-side rendering, real-time websocket updates, and responsive design. Built for developer metrics visualization.",
+        github: "https://github.com/0xcRachel/next-analytics",
+        gradientLight: false
+      },
+      {
+        id: 5,
+        title: "Zig + Python FFI Bridge",
+        tech: "Zig · Python · C-API · Pydantic",
+        description: "High-performance numerical library bridge between Zig and Python. Achieved 40% latency reduction for data processing pipelines.",
+        github: "https://github.com/0xcRachel/zig-py-bridge",
+        gradientLight: true
+      },
+      {
+        id: 6,
+        title: "NestJS Real-time Chat",
+        tech: "NestJS · WebSockets · MongoDB · Redis",
+        description: "Scalable chat microservice with room management, message persistence, and rate-limiting. Used in Discord dev community showcase.",
+        github: "https://github.com/0xcRachel/nestjs-chat",
+        gradientLight: false
+      }
+    ];
+
+    // Skill icons / tech stack (visual)
+    const skillSet = [
+      "PHP", "Laravel", "Rust", "Zig", "Python", "React.js", "NestJS", "Next.js", "UnrealCV", "Tailwind CSS"
+    ];
+
+    const ToolStack = () => (
+      <div className="flex flex-wrap gap-3 mt-6">
+        {skillSet.map((skill, idx) => (
+          <span key={idx} className="px-4 py-2 bg-ivory border border-border-cream rounded-xl text-charcoal-warm text-sm font-medium hover:bg-warm-sand hover:border-border-warm transition-all duration-200">
+            {skill}
+          </span>
+        ))}
+      </div>
+    );
+
+    const ProjectCard = ({ project }) => {
+      return (
+        <div className="bg-ivory border border-border-cream rounded-2xl whisper-shadow hover-lift transition-all duration-300 overflow-hidden group">
+          <div className="p-6 md:p-7">
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="font-serif text-2xl font-medium text-near-black tracking-tight">{project.title}</h3>
+              <div className="w-8 h-8 rounded-full bg-warm-sand/50 flex items-center justify-center text-terracotta group-hover:bg-terracotta group-hover:text-white transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" />
+                </svg>
+              </div>
+            </div>
+            <div className="text-sm font-mono text-terracotta mb-3 tracking-wide">{project.tech}</div>
+            <p className="text-olive-gray text-base leading-relaxed mb-5">{project.description}</p>
+            <a
+              href={project.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 text-sm font-medium text-near-black bg-warm-sand/40 hover:bg-warm-sand rounded-full px-5 py-2 transition-all ring-warm hover:ring-terracotta"
+            >
+              <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fillRule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clipRule="evenodd" /></svg>
+              GitHub Repository
+            </a>
+          </div>
+        </div>
+      );
+    };
+
+    const Header = () => (
+      <header className="sticky top-0 z-50 bg-parchment/90 backdrop-blur-sm border-b border-border-cream">
+        <div className="max-w-7xl mx-auto px-6 md:px-8 py-4 flex justify-between items-center">
+          <div className="flex items-baseline gap-2">
+            <span className="font-serif text-2xl font-medium tracking-tight text-near-black">0xcRachel</span>
+            <span className="text-stone-gray text-sm hidden md:inline-block ml-1">// Tùng Dương</span>
+          </div>
+          <nav className="hidden md:flex gap-8 text-charcoal-warm">
+            <a href="#about" className="hover:text-terracotta transition-colors text-base font-medium">About</a>
+            <a href="#skills" className="hover:text-terracotta transition-colors text-base font-medium">Skills</a>
+            <a href="#projects" className="hover:text-terracotta transition-colors text-base font-medium">Projects</a>
+            <a href="#contact" className="hover:text-terracotta transition-colors text-base font-medium">Contact</a>
+          </nav>
+          <a href="#contact" className="bg-terracotta text-ivory px-5 py-2 rounded-xl text-sm font-medium shadow-ring-terracotta hover:bg-coral-accent transition-all">
+            Let's connect
+          </a>
+        </div>
+      </header>
+    );
+
+    const Hero = () => (
+      <section className="max-w-7xl mx-auto px-6 md:px-8 pt-20 pb-16 md:pt-28 md:pb-24">
+        <div className="flex flex-col lg:flex-row gap-12 items-center">
+          <div className="flex-1 space-y-6">
+            <div className="inline-block px-4 py-1.5 bg-ivory rounded-full text-terracotta text-sm font-medium border border-border-cream">
+              ✦ backend architect & full-stack engineer
+            </div>
+            <h1 className="font-serif text-5xl md:text-7xl lg:text-7xl font-medium tracking-tight text-near-black leading-[1.15]">
+              Rachel<span className="text-terracotta">.</span><br />Crafting robust systems
+            </h1>
+            <p className="text-olive-gray text-xl md:text-2xl leading-relaxed max-w-xl">
+              Hi, I'm <span className="font-semibold text-near-black">Tùng Dương (0xcRachel)</span> — backend developer with a GPA of 3.65/4.0,
+              passionate about Laravel, Rust, Zig and modern web infrastructure.
+            </p>
+            <div className="flex flex-wrap gap-4 pt-4">
+              <a href="#projects" className="bg-near-black text-warm-silver px-6 py-3 rounded-xl font-medium ring-warm hover:bg-dark-surface transition-all flex items-center gap-2">
+                Explore work <span>→</span>
+              </a>
+              <a href="https://github.com/0xcRachel" target="_blank" className="bg-warm-sand text-charcoal-warm px-6 py-3 rounded-xl font-medium ring-warm hover:bg-border-warm transition-all flex items-center gap-2">
+                GitHub profile
+              </a>
+            </div>
+            {/* stats row */}
+            <div className="flex gap-8 pt-8 border-t border-border-cream mt-6">
+              <div><span className="font-serif text-3xl font-medium">3.65</span><span className="text-olive-gray ml-1">/4.0 GPA</span></div>
+              <div><span className="font-serif text-3xl font-medium">6+</span><span className="text-olive-gray ml-1">major projects</span></div>
+              <div><span className="font-serif text-3xl font-medium">∞</span><span className="text-olive-gray ml-1">curiosity</span></div>
+            </div>
+          </div>
+          <div className="flex-1 relative flex justify-center">
+            <div className="w-64 h-64 md:w-80 md:h-80 rounded-full bg-warm-sand/30 flex items-center justify-center border-2 border-border-cream animate-float">
+              <div className="w-56 h-56 md:w-72 md:h-72 rounded-full bg-ivory flex items-center justify-center shadow-whisper">
+                <span className="font-serif text-5xl text-terracotta font-medium">R</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+
+    const AboutSection = () => (
+      <section id="about" className="bg-ivory border-y border-border-cream py-20 md:py-28">
+        <div className="max-w-7xl mx-auto px-6 md:px-8">
+          <div className="max-w-3xl mx-auto text-center md:text-left md:mx-0">
+            <span className="text-terracotta text-sm font-medium uppercase tracking-wider">· Philosophy</span>
+            <h2 className="font-serif text-4xl md:text-5xl font-medium mt-3 mb-6 text-near-black">Code that breathes, systems that endure</h2>
+            <p className="text-olive-gray text-lg leading-relaxed mb-6">
+              I’m a backend-focused developer who believes in clean architecture, type safety, and human-centric performance.
+              Graduated with high distinction, I’ve been leading full-stack Laravel projects, building bridges between Zig and Python,
+              and contributing to the Discord dev community. My journey from PHP monoliths to Rust microservices taught me
+              that great engineering is both art and empathy.
+            </p>
+            <p className="text-charcoal-warm">
+              <span className="inline-block bg-warm-sand/40 px-3 py-1 rounded-full text-sm">🏆 core values: reliability · clarity · craftsmanship</span>
+            </p>
+          </div>
+        </div>
+      </section>
+    );
+
+    const SkillsShowcase = () => (
+      <section id="skills" className="py-20 md:py-28 bg-parchment">
+        <div className="max-w-7xl mx-auto px-6 md:px-8">
+          <div className="text-center mb-12">
+            <div className="inline-block px-3 py-1 bg-ivory rounded-full text-xs font-mono text-terracotta border border-border-cream">toolchain & stacks</div>
+            <h2 className="font-serif text-4xl md:text-5xl font-medium mt-4 text-near-black">Fluency across paradigms</h2>
+            <p className="text-olive-gray max-w-2xl mx-auto mt-4 text-lg">Laravel · Rust · Zig · Python · React ecosystem + UnrealCV research</p>
+          </div>
+          <ToolStack />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 mt-16">
+            <div className="bg-ivory p-7 rounded-2xl border border-border-cream whisper-shadow">
+              <h3 className="font-serif text-2xl font-medium mb-3">⚡ Backend master</h3>
+              <p className="text-olive-gray">Optimized REST APIs, JWT/OAuth, database indexing, queue workers, and livewire components. Experienced with high-concurrency simulation & caching strategies.</p>
+            </div>
+            <div className="bg-ivory p-7 rounded-2xl border border-border-cream whisper-shadow">
+              <h3 className="font-serif text-2xl font-medium mb-3">🦀 Systems & performance</h3>
+              <p className="text-olive-gray">Writing safe Rust, Zig FFI, performance profiling, memory optimization, and bridging low-level systems with high-level Python ML pipelines.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    );
+
+    const ProjectsGrid = () => (
+      <section id="projects" className="py-20 md:py-28 bg-ivory">
+        <div className="max-w-7xl mx-auto px-6 md:px-8">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-12 gap-4">
+            <div>
+              <span className="text-terracotta text-sm font-mono">/ recent builds</span>
+              <h2 className="font-serif text-4xl md:text-5xl font-medium text-near-black mt-2">GitHub constellations</h2>
+            </div>
+            <a href="https://github.com/0xcRachel" target="_blank" className="text-olive-gray hover:text-terracotta flex items-center gap-1 text-base transition-colors">
+              view all on github <span>↗</span>
+            </a>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {projectsData.map(project => (
+              <ProjectCard key={project.id} project={project} />
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+
+    const ContactCommunity = () => (
+      <section id="contact" className="bg-near-black text-ivory py-20 md:py-24">
+        <div className="max-w-6xl mx-auto px-6 md:px-8 text-center">
+          <div className="inline-block px-4 py-1.5 bg-dark-surface rounded-full text-warm-silver text-sm border border-[#30302e] mb-6">· Discord community ·</div>
+          <h2 className="font-serif text-4xl md:text-5xl font-medium text-ivory mb-5">Let's architect the future</h2>
+          <p className="text-warm-silver text-lg max-w-2xl mx-auto leading-relaxed mb-10">
+            Active member of Discord dev hubs, open source contributor, and always curious about new tech.
+            Reach out for collaborations, Rust meetups, or just to talk about distributed systems.
+          </p>
+          <div className="flex flex-wrap justify-center gap-5">
+            <a href="https://github.com/0xcRachel" target="_blank" className="bg-dark-surface/60 hover:bg-dark-surface border border-[#30302e] rounded-xl px-6 py-3 flex items-center gap-2 transition-all text-warm-silver">
+              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12c0 4.42 2.87 8.17 6.84 9.49.5.09.68-.21.68-.48 0-.24-.01-1.04-.01-1.89-2.78.6-3.37-1.2-3.37-1.2-.45-1.15-1.11-1.46-1.11-1.46-.91-.62.07-.61.07-.61 1 .07 1.53 1.03 1.53 1.03.89 1.52 2.34 1.08 2.91.83.09-.65.35-1.09.64-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.09.39-1.98 1.03-2.68-.11-.25-.45-1.27.1-2.64 0 0 .84-.27 2.75 1.02.8-.22 1.65-.33 2.5-.33.85 0 1.7.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.37.21 2.39.1 2.64.64.7 1.03 1.59 1.03 2.68 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85 0 1.34-.01 2.42-.01 2.75 0 .27.18.58.69.48C19.13 20.17 22 16.42 22 12c0-5.52-4.48-10-10-10z" /></svg>
+              GitHub / 0xcRachel
+            </a>
+            <a href="mailto:rachel@example.com" className="bg-terracotta hover:bg-coral-accent text-ivory rounded-xl px-6 py-3 flex items-center gap-2 transition-all">
+              ✉️ tungduong@dev.me
+            </a>
+          </div>
+          <div className="mt-12 text-sm text-stone-gray border-t border-dark-surface/50 pt-8">
+            <span>Discord: 0xcRachel • always open for backend collaborations & system design talks</span>
+          </div>
+        </div>
+      </section>
+    );
+
+    const Footer = () => (
+      <footer className="bg-parchment border-t border-border-cream py-8 text-center text-stone-gray text-sm">
+        <div className="max-w-7xl mx-auto px-6">
+          <p>© 2025 0xcRachel (Tùng Dương) — warm-coded with Claude-inspired minimalism & intellectual rigor</p>
+          <div className="flex justify-center gap-5 mt-3 text-xs">
+            <span>Laravel • Rust • Zig • Next.js • NestJS</span>
+          </div>
+        </div>
+      </footer>
+    );
+
+    const App = () => {
+      useEffect(() => {
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+          anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          });
+        });
+      }, []);
+
+      return (
+        <div className="bg-parchment">
+          <Header />
+          <main>
+            <Hero />
+            <AboutSection />
+            <SkillsShowcase />
+            <ProjectsGrid />
+            <ContactCommunity />
+          </main>
+          <Footer />
+        </div>
+      );
+    };
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
+</body>
+
+</html>

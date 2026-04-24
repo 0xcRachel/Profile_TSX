@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title></title>
+    <link rel="icon" type="image/jpeg" href="/img/icon.jpg">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&display=swap"
+        rel="stylesheet">
+
+<body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        parchment: '#f5f4ed',
+                        ivory: '#faf9f5',
+                        'warm-sand': '#e8e6dc',
+                        'terracotta': '#c96442',
+                        'coral-accent': '#d97757',
+                        'near-black': '#141413',
+                        'charcoal-warm': '#4d4c48',
+                        'olive-gray': '#5e5d59',
+                        'stone-gray': '#87867f',
+                        'dark-surface': '#30302e',
+                        'border-cream': '#f0eee6',
+                        'border-warm': '#e8e6dc',
+                        'warm-silver': '#b0aea5'
+                    },
+                    fontFamily: {
+                        serif: [
+                            'Playfair Display', 'Georgia', 'serif'
+                        ],
+                        sans: ['Inter', 'system-ui', 'Arial', 'sans-serif']
+                    },
+                    borderRadius: {
+                        'xl': '1rem',
+                        '2xl': '1.25rem',
+                        '3xl': '2rem'
+                    },
+                    boxShadow: {
+                        'ring-warm': '0px 0px 0px 1px #d1cfc5',
+                        'ring-terracotta': '0px 0px 0px 1px #c96442',
+                        'whisper': 'rgba(0, 0, 0, 0.05) 0px 4px 24px'
+                    }
+                }
+            }
+        }
+    </script>
+    <script>
+        let titleText = "0xcRachel & TungDuong Portfolio \u00A0\u00A0\u00A0 • \u00A0\u00A0\u00A0 ";
+        let titleArray = titleText.split("");
+        function smoothAnimate() {
+            titleArray.push(titleArray.shift());
+            document.title = titleArray.join("");
+            setTimeout(smoothAnimate, 300);
+        }
+        smoothAnimate();
+    </script>
+
+
+
+</body>
+</head>
+
+</html>

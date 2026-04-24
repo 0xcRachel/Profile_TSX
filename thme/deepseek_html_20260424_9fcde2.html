@@ -1,0 +1,744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>0xcRachel · Tùng Dương — Backend Architect</title>
+  <!-- Fonts: Playfair for serif, Inter for sans (Claude-inspired) -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background-color: #f5f4ed;
+      font-family: 'Inter', system-ui, -apple-system, 'Arial', sans-serif;
+      color: #141413;
+      overflow-x: hidden;
+      line-height: 1.5;
+    }
+
+    /* Custom CSS variables - Claude warm palette */
+    :root {
+      --parchment: #f5f4ed;
+      --ivory: #faf9f5;
+      --warm-sand: #e8e6dc;
+      --terracotta: #c96442;
+      --coral: #d97757;
+      --near-black: #141413;
+      --charcoal-warm: #4d4c48;
+      --olive-gray: #5e5d59;
+      --stone-gray: #87867f;
+      --dark-surface: #30302e;
+      --border-cream: #f0eee6;
+      --border-warm: #e8e6dc;
+      --warm-silver: #b0aea5;
+    }
+
+    /* Animation keyframes */
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(50px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeInScale {
+      0% {
+        opacity: 0;
+        transform: scale(0.9);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes glowPulse {
+      0% {
+        box-shadow: 0 0 0 0 rgba(201, 100, 66, 0.2);
+        opacity: 0.7;
+      }
+      70% {
+        box-shadow: 0 0 0 20px rgba(201, 100, 66, 0);
+        opacity: 1;
+      }
+      100% {
+        box-shadow: 0 0 0 0 rgba(201, 100, 66, 0);
+        opacity: 0.7;
+      }
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(0px);
+      }
+      50% {
+        transform: translateY(-8px);
+      }
+      100% {
+        transform: translateY(0px);
+      }
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: -200% 0;
+      }
+      100% {
+        background-position: 200% 0;
+      }
+    }
+
+    @keyframes borderGlow {
+      0% {
+        border-color: var(--border-cream);
+      }
+      50% {
+        border-color: var(--terracotta);
+      }
+      100% {
+        border-color: var(--border-cream);
+      }
+    }
+
+    /* Animation classes */
+    .animate-fade-up {
+      animation: fadeInUp 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1) forwards;
+    }
+
+    .animate-fade-scale {
+      animation: fadeInScale 0.7s ease-out forwards;
+    }
+
+    .animate-float {
+      animation: float 5s ease-in-out infinite;
+    }
+
+    .glow-ring {
+      animation: glowPulse 2.5s ease-in-out infinite;
+    }
+
+    /* Scroll reveal - intersection observer */
+    .reveal-on-scroll {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: all 0.8s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+    }
+
+    .reveal-on-scroll.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Warm shadows & rings */
+    .ring-warm {
+      box-shadow: 0px 0px 0px 1px var(--border-warm);
+    }
+
+    .ring-terracotta {
+      box-shadow: 0px 0px 0px 1px var(--terracotta);
+    }
+
+    .whisper-shadow {
+      box-shadow: rgba(0, 0, 0, 0.04) 0px 4px 20px;
+    }
+
+    .hover-lift {
+      transition: all 0.25s ease;
+    }
+
+    .hover-lift:hover {
+      transform: translateY(-3px);
+      box-shadow: rgba(0, 0, 0, 0.08) 0px 15px 30px;
+    }
+
+    /* Typography */
+    .font-serif {
+      font-family: 'Playfair Display', Georgia, serif;
+    }
+
+    .font-sans {
+      font-family: 'Inter', system-ui, Arial, sans-serif;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: var(--border-cream);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--terracotta);
+      border-radius: 4px;
+    }
+
+    /* Smooth transitions */
+    a, button {
+      transition: all 0.2s ease;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.development.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.development.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@babel/standalone/babel.min.js"></script>
+
+  <script type="text/babel">
+    // --------------------------------------------------------------
+    // PORTFOLIO: 0xcRachel (Tùng Dương)
+    // React with hooks, modular components, custom CSS animations
+    // No Tailwind, no emoji icons, Claude-inspired aesthetic
+    // --------------------------------------------------------------
+    const { useState, useEffect, useRef, useCallback } = React;
+
+    // ---------- Data ----------
+    const projectsData = [
+      {
+        id: 1,
+        title: "Homestay Booking System",
+        tech: "Laravel · PHP · MySQL · Tailwind",
+        description: "Led full-stack development of a homestay booking platform with real-time availability, payment simulation, admin dashboard, and optimized database queries.",
+        github: "https://github.com/0xcRachel/homestay-booking"
+      },
+      {
+        id: 2,
+        title: "Foodie Gourmet",
+        tech: "Laravel · Livewire · PostgreSQL · Redis",
+        description: "Core member of graduation project: food ordering system with JWT authentication, order workflow, caching strategies, supporting 50+ concurrent users.",
+        github: "https://github.com/0xcRachel/foodie-graduation"
+      },
+      {
+        id: 3,
+        title: "Rust CLI Tasker",
+        tech: "Rust · Clap · Serde · SQLite",
+        description: "High-performance CLI task manager with async I/O, custom error handling, report generation — 2x faster than Python implementation.",
+        github: "https://github.com/0xcRachel/rust-cli-tasker"
+      },
+      {
+        id: 4,
+        title: "Next.js Analytics Dashboard",
+        tech: "Next.js 14 · React · Chart.js",
+        description: "Interactive dashboard with server-side rendering, real-time websocket updates, responsive design for developer metrics visualization.",
+        github: "https://github.com/0xcRachel/next-analytics"
+      },
+      {
+        id: 5,
+        title: "Zig + Python FFI Bridge",
+        tech: "Zig · Python · C-API · Pydantic",
+        description: "High-performance numerical bridge between Zig and Python — 40% latency reduction for data processing pipelines.",
+        github: "https://github.com/0xcRachel/zig-py-bridge"
+      },
+      {
+        id: 6,
+        title: "NestJS Real-time Chat",
+        tech: "NestJS · WebSockets · MongoDB · Redis",
+        description: "Scalable chat microservice with room management, message persistence, rate-limiting — featured in Discord dev community.",
+        github: "https://github.com/0xcRachel/nestjs-chat"
+      }
+    ];
+
+    const skillSet = ["PHP", "Laravel", "Rust", "Zig", "Python", "React.js", "NestJS", "Next.js", "UnrealCV", "Tailwind CSS"];
+
+    const socialLinks = [
+      { name: "GitHub", url: "https://github.com/0xcRachel", handle: "/0xcRachel" },
+      { name: "LinkedIn", url: "https://linkedin.com/in/0xcRachel", handle: "in/0xcRachel" },
+      { name: "Discord", url: "https://discord.gg/community", handle: "0xcRachel" },
+      { name: "Twitter", url: "https://twitter.com/0xcRachel", handle: "@0xcRachel" },
+      { name: "Email", url: "mailto:tungduong@0xcrachel.dev", handle: "tungduong@0xcrachel.dev" }
+    ];
+
+    // ---------- Custom Hook: Scroll Reveal ----------
+    const useScrollReveal = () => {
+      useEffect(() => {
+        const elements = document.querySelectorAll('.reveal-on-scroll');
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach(entry => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('revealed');
+                observer.unobserve(entry.target);
+              }
+            });
+          },
+          { threshold: 0.1, rootMargin: "0px 0px -30px 0px" }
+        );
+        elements.forEach(el => observer.observe(el));
+        return () => observer.disconnect();
+      }, []);
+    };
+
+    // ---------- Components ----------
+    
+    // Header Component
+    const Header = () => {
+      const [isScrolled, setIsScrolled] = useState(false);
+      
+      useEffect(() => {
+        const handleScroll = () => setIsScrolled(window.scrollY > 20);
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+      }, []);
+      
+      return (
+        <header className="header" style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 1000,
+          backgroundColor: isScrolled ? 'rgba(245, 244, 237, 0.92)' : 'transparent',
+          backdropFilter: isScrolled ? 'blur(12px)' : 'none',
+          borderBottom: isScrolled ? '1px solid var(--border-cream)' : 'none',
+          transition: 'all 0.3s ease',
+          padding: '16px 0'
+        }}>
+          <div style={{
+            maxWidth: '1200px',
+            margin: '0 auto',
+            padding: '0 32px',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+          }}>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px' }}>
+              <span className="font-serif" style={{ fontSize: '28px', fontWeight: 600, letterSpacing: '-0.02em', color: 'var(--near-black)' }}>0xcRachel</span>
+              <span style={{ color: 'var(--stone-gray)', fontSize: '14px', display: 'none', '@media (min-width: 768px)': { display: 'inline' } }}>// Tùng Dương</span>
+            </div>
+            <nav style={{ display: 'none', gap: '32px', '@media (min-width: 768px)': { display: 'flex' } }}>
+              {['About', 'Skills', 'Projects', 'Connect'].map(item => (
+                <a key={item} href={`#${item.toLowerCase()}`} style={{ color: 'var(--charcoal-warm)', textDecoration: 'none', fontSize: '15px', fontWeight: 500, transition: 'color 0.2s' }}
+                   onMouseEnter={e => e.target.style.color = 'var(--terracotta)'}
+                   onMouseLeave={e => e.target.style.color = 'var(--charcoal-warm)'}>
+                  {item}
+                </a>
+              ))}
+            </nav>
+            <a href="#connect" style={{
+              backgroundColor: 'var(--terracotta)',
+              color: 'var(--ivory)',
+              padding: '8px 20px',
+              borderRadius: '12px',
+              fontSize: '14px',
+              fontWeight: 500,
+              textDecoration: 'none',
+              transition: 'all 0.2s',
+              boxShadow: '0px 0px 0px 1px var(--terracotta)'
+            }}
+            onMouseEnter={e => { e.target.style.backgroundColor = 'var(--coral)'; e.target.style.transform = 'translateY(-1px)'; }}
+            onMouseLeave={e => { e.target.style.backgroundColor = 'var(--terracotta)'; e.target.style.transform = 'none'; }}>
+              Hire me
+            </a>
+          </div>
+        </header>
+      );
+    };
+
+    // Hero Component - centered character focus
+    const Hero = ({ loaded }) => (
+      <section style={{
+        minHeight: '100vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        padding: '120px 32px 80px',
+        position: 'relative'
+      }}>
+        <div style={{ maxWidth: '900px', margin: '0 auto', textAlign: 'center' }}>
+          <div className={loaded ? 'animate-fade-up' : ''} style={{ opacity: loaded ? 1 : 0, marginBottom: '24px' }}>
+            <span style={{
+              display: 'inline-block',
+              padding: '4px 16px',
+              backgroundColor: 'var(--ivory)',
+              borderRadius: '40px',
+              border: '1px solid var(--border-cream)',
+              color: 'var(--terracotta)',
+              fontSize: '12px',
+              fontWeight: 500,
+              letterSpacing: '0.5px'
+            }}>
+              BACKEND ARCHITECT & CREATOR
+            </span>
+          </div>
+          
+          <div className={loaded ? 'animate-fade-scale' : ''} style={{ opacity: loaded ? 1 : 0, marginBottom: '32px' }}>
+            <div style={{
+              width: '120px',
+              height: '120px',
+              margin: '0 auto',
+              borderRadius: '50%',
+              background: 'linear-gradient(135deg, var(--warm-sand), var(--ivory))',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: '0px 0px 0px 2px var(--terracotta)',
+              animation: 'float 5s ease-in-out infinite'
+            }}>
+              <span className="font-serif" style={{ fontSize: '56px', fontWeight: 700, color: 'var(--terracotta)' }}>R</span>
+            </div>
+          </div>
+          
+          <h1 className={`font-serif ${loaded ? 'animate-fade-up' : ''}`} style={{
+            fontSize: 'clamp(48px, 8vw, 88px)',
+            fontWeight: 700,
+            letterSpacing: '-0.02em',
+            color: 'var(--near-black)',
+            lineHeight: 1.15,
+            marginBottom: '20px',
+            opacity: loaded ? 1 : 0,
+            animationDelay: '0.1s'
+          }}>
+            Tùng Dương<br/>
+            <span style={{ color: 'var(--terracotta)' }}>0xcRachel</span>
+          </h1>
+          
+          <p className={loaded ? 'animate-fade-up' : ''} style={{
+            fontSize: 'clamp(18px, 4vw, 22px)',
+            color: 'var(--olive-gray)',
+            maxWidth: '600px',
+            margin: '0 auto',
+            lineHeight: 1.6,
+            opacity: loaded ? 1 : 0,
+            animationDelay: '0.2s'
+          }}>
+            Web & systems architect • 3.65/4.0 GPA • Shaping robust backends with Laravel, Rust, and Zig
+          </p>
+          
+          <div className={loaded ? 'animate-fade-up' : ''} style={{
+            display: 'flex',
+            gap: '16px',
+            justifyContent: 'center',
+            marginTop: '40px',
+            opacity: loaded ? 1 : 0,
+            animationDelay: '0.3s'
+          }}>
+            <a href="#projects" style={{
+              backgroundColor: 'var(--near-black)',
+              color: 'var(--warm-silver)',
+              padding: '12px 28px',
+              borderRadius: '12px',
+              textDecoration: 'none',
+              fontWeight: 500,
+              transition: 'all 0.2s'
+            }}
+            onMouseEnter={e => { e.target.style.backgroundColor = 'var(--dark-surface)'; e.target.style.transform = 'translateY(-2px)'; }}
+            onMouseLeave={e => { e.target.style.backgroundColor = 'var(--near-black)'; e.target.style.transform = 'none'; }}>
+              Explore projects
+            </a>
+            <a href="#connect" style={{
+              backgroundColor: 'var(--warm-sand)',
+              color: 'var(--charcoal-warm)',
+              padding: '12px 28px',
+              borderRadius: '12px',
+              textDecoration: 'none',
+              fontWeight: 500,
+              transition: 'all 0.2s'
+            }}
+            onMouseEnter={e => { e.target.style.backgroundColor = 'var(--border-warm)'; e.target.style.transform = 'translateY(-2px)'; }}
+            onMouseLeave={e => { e.target.style.backgroundColor = 'var(--warm-sand)'; e.target.style.transform = 'none'; }}>
+              Connect with me
+            </a>
+          </div>
+          
+          <div className={loaded ? 'animate-fade-up' : ''} style={{
+            display: 'flex',
+            justifyContent: 'center',
+            gap: '48px',
+            marginTop: '60px',
+            paddingTop: '32px',
+            borderTop: '1px solid var(--border-cream)',
+            maxWidth: '300px',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+            opacity: loaded ? 1 : 0,
+            animationDelay: '0.4s'
+          }}>
+            {[
+              { value: '3.65', label: 'GPA' },
+              { value: '6+', label: 'Projects' },
+              { value: '∞', label: 'Curiosity' }
+            ].map(stat => (
+              <div key={stat.label} style={{ textAlign: 'center' }}>
+                <span className="font-serif" style={{ fontSize: '32px', fontWeight: 700, color: 'var(--near-black)' }}>{stat.value}</span>
+                <span style={{ color: 'var(--olive-gray)', fontSize: '14px', marginLeft: '4px' }}>{stat.label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+
+    // About Section
+    const About = () => (
+      <section id="about" style={{
+        backgroundColor: 'var(--ivory)',
+        borderTop: '1px solid var(--border-cream)',
+        borderBottom: '1px solid var(--border-cream)',
+        padding: '100px 32px'
+      }}>
+        <div className="reveal-on-scroll" style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
+          <span style={{ color: 'var(--terracotta)', fontSize: '13px', fontWeight: 500, letterSpacing: '1px' }}>ABOUT</span>
+          <h2 className="font-serif" style={{ fontSize: 'clamp(36px, 6vw, 52px)', fontWeight: 700, marginTop: '12px', marginBottom: '24px', color: 'var(--near-black)' }}>
+            Craft with clarity
+          </h2>
+          <p style={{ fontSize: '18px', lineHeight: 1.7, color: 'var(--olive-gray)', marginBottom: '24px' }}>
+            Hi, I'm <strong style={{ color: 'var(--near-black)' }}>Tùng Dương (0xcRachel)</strong> — a backend developer who thrives at the intersection of performance and elegance. 
+            With a 3.65 GPA and hands-on experience leading Laravel projects, building Rust tooling, and bridging Zig with Python, 
+            I aim to create systems that are both powerful and human-centric.
+          </p>
+          <p style={{ fontSize: '18px', lineHeight: 1.7, color: 'var(--olive-gray)' }}>
+            Active member of Discord developer communities, continuously exploring new paradigms in distributed systems and type-safe architectures.
+          </p>
+          <div style={{
+            display: 'inline-block',
+            marginTop: '32px',
+            padding: '8px 24px',
+            backgroundColor: 'rgba(232, 230, 220, 0.5)',
+            borderRadius: '40px',
+            fontSize: '14px',
+            color: 'var(--charcoal-warm)'
+          }}>
+            "Code that breathes, systems that endure"
+          </div>
+        </div>
+      </section>
+    );
+
+    // Skills Section
+    const Skills = () => (
+      <section id="skills" style={{ padding: '100px 32px' }}>
+        <div className="reveal-on-scroll" style={{ maxWidth: '1000px', margin: '0 auto', textAlign: 'center' }}>
+          <span style={{ color: 'var(--terracotta)', fontSize: '13px', fontWeight: 500, letterSpacing: '1px' }}>TECH FLUENCY</span>
+          <h2 className="font-serif" style={{ fontSize: 'clamp(36px, 6vw, 52px)', fontWeight: 700, marginTop: '12px', marginBottom: '16px', color: 'var(--near-black)' }}>
+            Toolbox & ecosystems
+          </h2>
+          <p style={{ color: 'var(--olive-gray)', maxWidth: '550px', margin: '0 auto 40px', fontSize: '17px' }}>
+            Backend, full-stack, systems programming, and experimental computer vision
+          </p>
+          
+          <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '12px', marginBottom: '48px' }}>
+            {skillSet.map((skill, idx) => (
+              <span key={idx} style={{
+                padding: '8px 20px',
+                backgroundColor: 'var(--ivory)',
+                border: '1px solid var(--border-cream)',
+                borderRadius: '40px',
+                color: 'var(--charcoal-warm)',
+                fontSize: '14px',
+                fontWeight: 500,
+                transition: 'all 0.2s'
+              }}
+              onMouseEnter={e => { e.target.style.backgroundColor = 'var(--warm-sand)'; e.target.style.borderColor = 'var(--border-warm)'; }}
+              onMouseLeave={e => { e.target.style.backgroundColor = 'var(--ivory)'; e.target.style.borderColor = 'var(--border-cream)'; }}>
+                {skill}
+              </span>
+            ))}
+          </div>
+          
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '24px' }}>
+            {[
+              { title: 'Backend mastery', desc: 'Laravel, NestJS, REST/GraphQL APIs, database optimization, queue workers, authentication & real-time events.' },
+              { title: 'Systems & performance', desc: 'Rust, Zig, Python bindings, low-latency tooling, memory safety, and FFI bridges for high-performance pipelines.' }
+            ].map(card => (
+              <div key={card.title} className="hover-lift" style={{
+                backgroundColor: 'var(--ivory)',
+                padding: '28px',
+                borderRadius: '20px',
+                border: '1px solid var(--border-cream)',
+                textAlign: 'left'
+              }}>
+                <h3 className="font-serif" style={{ fontSize: '26px', fontWeight: 600, marginBottom: '12px', color: 'var(--near-black)' }}>{card.title}</h3>
+                <p style={{ color: 'var(--olive-gray)', lineHeight: 1.6 }}>{card.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    );
+
+    // Project Card Component
+    const ProjectCard = ({ project, index }) => (
+      <div className={`reveal-on-scroll hover-lift`} style={{
+        backgroundColor: 'var(--ivory)',
+        borderRadius: '20px',
+        border: '1px solid var(--border-cream)',
+        padding: '28px',
+        transitionDelay: `${index * 0.05}s`
+      }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '12px' }}>
+          <h3 className="font-serif" style={{ fontSize: '24px', fontWeight: 700, color: 'var(--near-black)' }}>{project.title}</h3>
+          <div style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: 'var(--terracotta)' }}></div>
+        </div>
+        <div style={{ fontFamily: 'monospace', fontSize: '13px', color: 'var(--terracotta)', marginBottom: '16px', letterSpacing: '0.3px' }}>
+          {project.tech}
+        </div>
+        <p style={{ color: 'var(--olive-gray)', lineHeight: 1.6, marginBottom: '24px', fontSize: '15px' }}>
+          {project.description}
+        </p>
+        <a href={project.github} target="_blank" rel="noopener noreferrer" style={{
+          display: 'inline-flex',
+          alignItems: 'center',
+          gap: '8px',
+          padding: '10px 20px',
+          backgroundColor: 'rgba(232, 230, 220, 0.5)',
+          borderRadius: '40px',
+          textDecoration: 'none',
+          color: 'var(--near-black)',
+          fontSize: '14px',
+          fontWeight: 500,
+          transition: 'all 0.2s'
+        }}
+        onMouseEnter={e => { e.target.style.backgroundColor = 'var(--warm-sand)'; e.target.style.boxShadow = '0px 0px 0px 1px var(--border-warm)'; }}
+        onMouseLeave={e => { e.target.style.backgroundColor = 'rgba(232, 230, 220, 0.5)'; e.target.style.boxShadow = 'none'; }}>
+          GitHub →
+        </a>
+      </div>
+    );
+
+    // Projects Grid
+    const Projects = () => (
+      <section id="projects" style={{ backgroundColor: 'var(--ivory)', padding: '100px 32px' }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <div className="reveal-on-scroll" style={{ textAlign: 'center', marginBottom: '56px' }}>
+            <span style={{ color: 'var(--terracotta)', fontSize: '13px', fontWeight: 500, letterSpacing: '1px' }}>FEATURED WORK</span>
+            <h2 className="font-serif" style={{ fontSize: 'clamp(36px, 6vw, 52px)', fontWeight: 700, marginTop: '12px', color: 'var(--near-black)' }}>
+              Recent constellations
+            </h2>
+            <p style={{ color: 'var(--olive-gray)', marginTop: '12px' }}>Open source, graduation projects and experimental builds</p>
+          </div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: '28px' }}>
+            {projectsData.map((project, idx) => (
+              <ProjectCard key={project.id} project={project} index={idx} />
+            ))}
+          </div>
+          <div className="reveal-on-scroll" style={{ textAlign: 'center', marginTop: '48px' }}>
+            <a href="https://github.com/0xcRachel" target="_blank" style={{
+              color: 'var(--terracotta)',
+              borderBottom: '1px solid rgba(201, 100, 66, 0.3)',
+              textDecoration: 'none',
+              paddingBottom: '4px',
+              transition: 'border-color 0.2s'
+            }}
+            onMouseEnter={e => e.target.style.borderColor = 'var(--terracotta)'}
+            onMouseLeave={e => e.target.style.borderColor = 'rgba(201, 100, 66, 0.3)'}>
+              View all GitHub repositories →
+            </a>
+          </div>
+        </div>
+      </section>
+    );
+
+    // Social / Connect Section
+    const Connect = () => (
+      <section id="connect" style={{ backgroundColor: 'var(--near-black)', padding: '100px 32px' }}>
+        <div className="reveal-on-scroll" style={{ maxWidth: '800px', margin: '0 auto', textAlign: 'center' }}>
+          <span style={{
+            display: 'inline-block',
+            padding: '4px 16px',
+            backgroundColor: 'var(--dark-surface)',
+            borderRadius: '40px',
+            color: 'var(--warm-silver)',
+            fontSize: '12px',
+            border: '1px solid #30302e',
+            marginBottom: '24px'
+          }}>
+            LET'S CONNECT
+          </span>
+          <h2 className="font-serif" style={{ fontSize: 'clamp(36px, 6vw, 52px)', fontWeight: 700, color: 'var(--ivory)', marginBottom: '20px' }}>
+            Reach out directly
+          </h2>
+          <p style={{ color: 'var(--warm-silver)', fontSize: '18px', lineHeight: 1.6, maxWidth: '550px', margin: '0 auto 48px' }}>
+            I'm open for backend engineering roles, Rust collaborations, or thoughtful conversations about distributed systems.
+          </p>
+          
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))', gap: '12px', marginBottom: '48px' }}>
+            {socialLinks.map((social, idx) => (
+              <a key={idx} href={social.url} target="_blank" rel="noopener noreferrer" style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                padding: '14px 20px',
+                backgroundColor: 'var(--dark-surface)',
+                borderRadius: '14px',
+                textDecoration: 'none',
+                color: 'var(--warm-silver)',
+                transition: 'all 0.2s'
+              }}
+              onMouseEnter={e => { e.target.style.backgroundColor = 'var(--terracotta)'; e.target.style.transform = 'translateY(-2px)'; e.target.style.color = 'white'; }}
+              onMouseLeave={e => { e.target.style.backgroundColor = 'var(--dark-surface)'; e.target.style.transform = 'none'; e.target.style.color = 'var(--warm-silver)'; }}>
+                <span style={{ fontWeight: 500 }}>{social.name}</span>
+                <span style={{ fontSize: '12px', opacity: 0.7 }}>{social.handle}</span>
+              </a>
+            ))}
+          </div>
+          
+          <div style={{ borderTop: '1px solid rgba(48, 48, 46, 0.5)', paddingTop: '32px', fontSize: '13px', color: 'var(--stone-gray)' }}>
+            Discord community active • always eager to build meaningful tech
+          </div>
+        </div>
+      </section>
+    );
+
+    // Footer
+    const Footer = () => (
+      <footer style={{
+        backgroundColor: 'var(--parchment)',
+        borderTop: '1px solid var(--border-cream)',
+        padding: '32px',
+        textAlign: 'center',
+        color: 'var(--stone-gray)',
+        fontSize: '13px'
+      }}>
+        <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+          <p>© 2025 0xcRachel (Tùng Dương) — warm, minimal, and built with modern craft</p>
+          <div style={{ display: 'flex', justifyContent: 'center', gap: '24px', marginTop: '12px', fontSize: '12px' }}>
+            <span>Laravel</span>
+            <span>Rust</span>
+            <span>Zig</span>
+            <span>Next.js</span>
+            <span>NestJS</span>
+          </div>
+        </div>
+      </footer>
+    );
+
+    // Main App Component
+    const App = () => {
+      const [loaded, setLoaded] = useState(false);
+      useScrollReveal();
+      
+      useEffect(() => {
+        setTimeout(() => setLoaded(true), 100);
+      }, []);
+      
+      return (
+        <div style={{ backgroundColor: 'var(--parchment)' }}>
+          <Header />
+          <main>
+            <Hero loaded={loaded} />
+            <About />
+            <Skills />
+            <Projects />
+            <Connect />
+          </main>
+          <Footer />
+        </div>
+      );
+    };
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+  </script>
+</body>
+</html>
