@@ -1,4 +1,4 @@
-import React from 'react'
+
 import ProjectCard from '../hooks/ProjectCard'
 import RevealOnScroll from './RevealOnScroll'
 
