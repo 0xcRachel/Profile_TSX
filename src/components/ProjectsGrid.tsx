@@ -14,7 +14,7 @@ const ProjectsGrid = () => {
         },
         {
             id: 2,
-            title: "Foodie Gourmet (Graduation Project)",
+            title: "Foodie Gourmet",
             tech: "Laravel · Livewire · PostgreSQL · Redis",
             description: "Core development member for a food ordering & restaurant management system. Implemented JWT auth, order workflow, and caching strategies serving 50+ concurrent users.",
             github: "https://github.com/0xcRachel/foodie-graduation",
