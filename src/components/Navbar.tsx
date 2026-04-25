@@ -7,12 +7,7 @@ const Navbar = () => {
             <span className="font-serif text-2xl font-medium tracking-tight text-near-black">0xcRachel</span>
             <span className="text-stone-gray text-sm hidden md:inline-block ml-1">(Tùng Dương)</span>
           </div>
-          <nav className="hidden md:flex gap-8 text-charcoal-warm">
-            <a href="#about" className="hover:text-terracotta transition-colors text-base font-medium">About</a>
-            <a href="#skills" className="hover:text-terracotta transition-colors text-base font-medium">Skills</a>
-            <a href="#projects" className="hover:text-terracotta transition-colors text-base font-medium">Projects</a>
-            <a href="#contact" className="hover:text-terracotta transition-colors text-base font-medium">Contact</a>
-          </nav>
+          
           <a href="#contact" className="bg-terracotta text-ivory px-5 py-2 rounded-xl text-sm font-medium shadow-ring-terracotta hover:bg-coral-accent transition-all">
             Let's connect
           </a>
