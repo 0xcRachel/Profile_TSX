@@ -51,7 +51,7 @@ const Hero = () => {
               transition={{ type: "spring", damping: 12, delay: initDelay + 0.1 }}
               style={{ transformOrigin: "bottom" }}
             >
-              Rachel
+            Rachel
             </motion.span>
             <motion.span 
               className="text-terracotta inline-block"

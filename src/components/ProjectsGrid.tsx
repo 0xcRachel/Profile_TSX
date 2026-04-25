@@ -6,10 +6,10 @@ const ProjectsGrid = () => {
     const projectsData = [
         {
             id: 1,
-            title: "Homestay Booking System",
-            tech: "Laravel · PHP · MySQL · Tailwind",
-            description: "Led full-stack development of a complete homestay booking platform with real-time availability, payment simulation, and admin dashboard. Optimized DB queries and integrated地图 search.",
-            github: "https://github.com/0xcRachel/homestay-booking",
+            title: "Waizu Main Fest",
+            tech: "Rust · React · Hack · Tailwind · Tauri",
+            description: "Desktop application for viewing game information, checking manifest status, and managing game-related data automatically. Displays cover image, App ID, developer details, release date, system requirements, and verifies manifest availability for selected games.",
+            github: "https://github.com/0xcRachel/WaizuMainFest-OpenSrc",
             gradientLight: true
         },
         {
