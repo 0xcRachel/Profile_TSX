@@ -18,6 +18,7 @@ const ProjectsGrid = () => {
             tech: "Rust · React · Hack · Tauri",
             description: "Desktop application for game information, system controller, checking manifest status, and managing game-related data automatically. Displays cover image, App ID, developer details, release date, system requirements, and verifies manifest availability for selected games and Inject Loading for Steam Onload",
             github: "https://github.com/0xcRachel/Micah_0xC.git",
+            website: "https://micah0xc.vercel.app",
             gradientLight: true
         },
         {
