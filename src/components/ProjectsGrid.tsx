@@ -14,11 +14,11 @@ const ProjectsGrid = () => {
         },
         {
             id: 2,
-            title: "Foodie Gourmet",
-            tech: "Laravel · Livewire · PostgreSQL · Redis",
-            description: "Core development member for a food ordering & restaurant management system. Implemented JWT auth, order workflow, and caching strategies serving 50+ concurrent users.",
-            github: "https://github.com/0xcRachel/foodie-graduation",
-            gradientLight: false
+            title: "Micah-0xc",
+            tech: "Rust · React · Hack · Tauri",
+            description: "Desktop application for game information, system controller, checking manifest status, and managing game-related data automatically. Displays cover image, App ID, developer details, release date, system requirements, and verifies manifest availability for selected games and Inject Loading for Steam Onload",
+            github: "https://github.com/0xcRachel/Micah_0xC.git",
+            gradientLight: true
         },
         {
             id: 3,
